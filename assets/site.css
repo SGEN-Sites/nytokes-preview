@@ -226,9 +226,10 @@ h1 em, h2 em, .display em, .accent {
 @keyframes cue { 0% { top: -12px; } 100% { top: 46px; } }
 
 /* ---------- page hero (inner pages) ---------- */
-.phero { position: relative; isolation: isolate; overflow: hidden; padding: calc(var(--hdr) + clamp(70px, 9vw, 130px)) 0 clamp(70px, 8vw, 120px); min-height: min(86svh, 820px); display: flex; align-items: flex-end; }
+.phero { position: relative; z-index: 2; isolation: isolate; padding: calc(var(--hdr) + clamp(70px, 9vw, 130px)) 0 clamp(70px, 8vw, 120px); min-height: min(86svh, 820px); display: flex; align-items: flex-end; }
 .phero--short { min-height: 0; padding-bottom: clamp(48px, 6vw, 80px); }
-.phero__bg { position: absolute; inset: -8% 0 0; z-index: -2; }
+.phero__clip { position: absolute; inset: 0; z-index: -2; overflow: hidden; }
+.phero__bg { position: absolute; inset: -8% 0 0; }
 .phero__bg img { width: 100%; height: 100%; object-fit: cover; filter: saturate(0.85) contrast(1.05) brightness(0.72); }
 .phero::before {
   content: ''; position: absolute; inset: 0; z-index: -1; pointer-events: none;
@@ -241,7 +242,7 @@ h1 em, h2 em, .display em, .accent {
 .phero__in { position: relative; width: 100%; }
 .phero h1 { max-width: 15em; text-wrap: balance; }
 .phero .lede { max-width: 46ch; margin-top: 18px; }
-.phero__obj { position: absolute; right: max(var(--pad), calc((100vw - 1320px) / 2 + 20px)); bottom: -40px; width: clamp(200px, 26vw, 400px); z-index: 1; pointer-events: none; filter: drop-shadow(0 30px 60px rgba(0, 0, 0, 0.8)) drop-shadow(0 0 40px rgba(240, 122, 26, 0.25)); }
+.phero__obj { position: absolute; right: max(var(--pad), calc((100vw - 1320px) / 2 + 20px)); bottom: -70px; width: clamp(200px, 24vw, 380px); z-index: 5; pointer-events: none; filter: drop-shadow(0 30px 60px rgba(0, 0, 0, 0.8)) drop-shadow(0 0 40px rgba(240, 122, 26, 0.25)); }
 .crumbs { display: flex; flex-wrap: wrap; gap: 6px 10px; margin: 0 0 22px; padding: 0; list-style: none; font: 500 13px var(--f-ui); color: var(--dim); }
 .crumbs li + li::before { content: '/'; margin-right: 10px; color: #4d4740; }
 .crumbs a { color: var(--mute); text-decoration: none; }
@@ -486,14 +487,14 @@ h1 em, h2 em, .display em, .accent {
 .faq .a p:last-child { margin-bottom: 0; }
 
 /* ---------- CTA band / flood ---------- */
-.band { position: relative; overflow: hidden; border-radius: 30px; padding: clamp(40px, 6vw, 90px); isolation: isolate; background: var(--grad-hot); color: #160800; }
-.band::before { content: ''; position: absolute; inset: 0; z-index: -1; background: url('../assets/img/image09-6b2e6c.webp') center / 420px; opacity: 0.08; mix-blend-mode: multiply; }
+.band { position: relative; border-radius: 30px; padding: clamp(40px, 6vw, 90px); isolation: isolate; background: var(--grad-hot); color: #160800; }
+.band::before { content: ''; position: absolute; inset: 0; z-index: -1; border-radius: inherit; background: url('../assets/img/image09-6b2e6c.webp') center / 420px; opacity: 0.08; mix-blend-mode: multiply; }
 .band h2 { color: #120600; max-width: 16em; }
 .band p { color: #2b1200; max-width: 52ch; font-size: 18px; }
 .band .btn { --b: #0d0a08; color: #fff; box-shadow: 0 16px 40px -16px rgba(0, 0, 0, 0.8); }
 .band .btn:hover { color: var(--flare); }
 .band .btn--ghost { background: rgba(255, 255, 255, 0.2); color: #160800; box-shadow: inset 0 0 0 1px rgba(22, 8, 0, 0.35); }
-.band__obj { position: absolute; right: -2%; bottom: -10%; width: clamp(200px, 26vw, 380px); z-index: -1; filter: drop-shadow(0 30px 50px rgba(80, 20, 0, 0.6)); }
+.band__obj { position: absolute; right: 3%; top: -70px; width: clamp(170px, 19vw, 290px); z-index: 2; pointer-events: none; filter: drop-shadow(0 30px 50px rgba(80, 20, 0, 0.6)); }
 
 /* ---------- photo band ---------- */
 .pband { position: relative; min-height: clamp(420px, 60vw, 720px); display: flex; align-items: flex-end; overflow: hidden; isolation: isolate; }
@@ -743,7 +744,9 @@ h1 em, h2 em, .display em, .accent {
   .faq .a { padding-right: 8px; }
   .revs__stage { min-height: 360px; }
   .band { border-radius: 22px; }
-  .band__obj { width: 160px; opacity: 0.55; }
+  .band { padding-top: 110px; }
+  .band__obj { width: 130px; top: -46px; right: 12px; }
+  .phero__obj { bottom: -44px; }
 }
 @media (max-width: 420px) {
   .cats { --cc: 2 !important; }
@@ -757,3 +760,21 @@ h1 em, h2 em, .display em, .accent {
   .float { animation: none; }
 }
 @media print { .hdr, .sbar, .agegate, .drawer, .trail, .embers { display: none !important; } body { background: #fff; color: #000; } }
+
+/* ---------- no lone last-row card: the last card of an uneven row spans the row ---------- */
+@media (min-width: 1025px) {
+  .cards:not([style]) > :last-child:nth-child(3n+1), .cards[style*="--kc:3"] > :last-child:nth-child(3n+1),
+  .cards[style*="--kc:4"]:not(.cards--feat) > :last-child:nth-child(4n+1), .cards[style*="--kc:2"] > :last-child:nth-child(2n+1) { grid-column: 1 / -1; }
+  .cards:not([style]) > :last-child:nth-child(3n+1) .mcard__img, .cards[style*="--kc:3"] > :last-child:nth-child(3n+1) .mcard__img,
+  .cards[style*="--kc:4"]:not(.cards--feat) > :last-child:nth-child(4n+1) .mcard__img, .cards[style*="--kc:2"] > :last-child:nth-child(2n+1) .mcard__img { aspect-ratio: 21 / 8; }
+}
+@media (min-width: 1181px) { .cats[style*="--cc:3"] > :last-child:nth-child(3n+1), .cats[style*="--cc:4"] > :last-child:nth-child(4n+1) { grid-column: 1 / -1; } }
+@media (min-width: 761px) and (max-width: 1180px) { .cats > :last-child:nth-child(3n+1) { grid-column: 1 / -1; } }
+@media (max-width: 760px) { .cats > :last-child:nth-child(2n+1) { grid-column: 1 / -1; } }
+@media (min-width: 761px) and (max-width: 1024px) {
+  .cards:not(.cards--feat) > :last-child:nth-child(2n+1) { grid-column: 1 / -1; }
+  .cards:not(.cards--feat) > :last-child:nth-child(2n+1) .mcard__img { aspect-ratio: 21 / 8; }
+}
+/* featured first card (strains hub): 2x2 + 12 fills 4 and 2 column grids evenly */
+@media (min-width: 761px) { .cards--feat > :first-child { grid-column: span 2; grid-row: span 2; } .cards--feat > :first-child .mcard__img { aspect-ratio: auto; height: calc(100% - 120px); min-height: 320px; } }
+@media (max-width: 760px) { .brandwall > :last-child:nth-child(2n+1) { grid-column: 1 / -1; aspect-ratio: auto; min-height: 120px; } }
